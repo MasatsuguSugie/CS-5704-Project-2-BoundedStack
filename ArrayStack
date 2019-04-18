@@ -1,0 +1,179 @@
+package boundedstack;
+
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
+/**
+ * Write a one-sentence summary of your class here. Follow it with additional details about its
+ * purpose, what abstraction it represents, and how to use it.
+ * 
+ * @author sugie
+ * @version Mar 2, 2019
+ * @param <E>
+ */
+public class ArrayStack<E>
+    extends AbstractStack<E>
+{
+    private E[] contents;
+    private int depth;
+
+
+    // representation: contents = [A | B | C | D | E | F ] and depth of 3
+    // abstraction: stack = [A, B , C]:6
+
+    /**
+     * Create a new ArrayStack object.
+     * 
+     * @param max
+     *            capacity of the bounded stack
+     * @throws IllegalArgumentException
+     */
+    @SuppressWarnings("unchecked")
+    public ArrayStack(int max)
+        throws IllegalArgumentException
+    {
+        super(max);
+        if (max < 1)
+        {
+            throw new IllegalArgumentException();
+        }
+        contents = (E[])new Object[max];
+        depth = 0;
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void push(E element)
+        throws IllegalStateException,
+        IllegalArgumentException
+    {
+        if (depth == capacity()) // stack is full
+        {
+            throw new IllegalStateException();
+        }
+        if (element == null)
+        {
+            throw new IllegalArgumentException();
+        }
+        // this = [A, B, C]:6 (rep: contents = [A | B | C | * | * | * ] and depth of 3
+        contents[depth] = element;
+        depth++;
+        // this = [A, B, C, X]:6 (rep: contents = [A | B | C | X | * | * ] and depth of 4
+
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public E pop()
+    {
+        if (depth() == 0) // Stack is full
+        {
+            throw new IllegalStateException();
+        }
+        // this = [A, B, C]:6 (rep: contents = [A | B | C | * | * | * ] and depth of 3
+        E result = contents[depth - 1];
+        depth--;
+        return result;
+        // this = [A, B]:6 (rep: contents = [A | B | * | * | * | * ] and depth of 2
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int depth()
+    {
+        return depth;
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int capacity()
+    {
+        return contents.length;
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void clear()
+    {
+        // this = [A, B, C]:6 (rep: contents = [ A | B | C | * | * | * ] and depth = 3
+        depth = 0;
+        // this = []:6 (rep: contents = [ * | * | * | * | * | * ] and depth = 0
+
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Stack<E> newInstance()
+    {
+        // this = [A, B, C]:6 (rep: contents = [ A | B | C | * | * | * ]
+        return new ArrayStack<>(capacity());
+        // this = [A, B, C]:6 (rep: contents = [ A | B | C | * | * | * ]
+        // result = []:6
+
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Iterator<E> iterator()
+    {
+        return new StackIterator();
+    }
+
+
+    private class StackIterator
+        implements Iterator<E>
+    {
+
+        private int currentIndex = 0;
+
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean hasNext()
+        {
+            return currentIndex != depth;
+        }
+
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public E next()
+            throws NoSuchElementException
+        {
+            if (!hasNext())
+            {
+                throw new NoSuchElementException();
+            }
+            E result = contents[currentIndex];
+            currentIndex++;
+            return result;
+        }
+
+    }
+
+}
