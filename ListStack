@@ -1,0 +1,135 @@
+package boundedstack;
+
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
+/**
+ * Write a one-sentence summary of your class here. Follow it with additional details about its
+ * purpose, what abstraction it represents, and how to use it.
+ * 
+ * @author sugie
+ * @version Feb 23, 2019
+ * @param <E>
+ *            the type of elements in this stack
+ */
+public class ListStack<E>
+    extends AbstractStack<E>
+{
+
+    // representation
+    private List<E> contents; // declarations
+
+    // contents = <> and capacity = 3 ==> stack = []:3
+    // contents = <A> and capacity = 10 ==> stack = [A]:10
+    // contents = <A, B, C> and capacity = 6 ==> stack = [A, B, C]:6
+
+
+    /**
+     * Create a new bounded stack with the specified maximum capacity.
+     * 
+     * @param max
+     *            capacity of the bounded stack
+     * @throws IllegalArgumentException
+     *             if the capacity is zero or negative
+     */
+    public ListStack(int max)
+        throws IllegalArgumentException
+    {
+        super(max);
+        if (max < 1)
+        {
+            throw new IllegalArgumentException();
+        }
+        contents = new LinkedList<>(); // initializations
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void push(E element)
+        throws IllegalStateException,
+        IllegalArgumentException
+    {
+        if (depth() == capacity())
+        {
+            throw new IllegalStateException();
+        }
+        if (element == null)
+        {
+            throw new IllegalArgumentException();
+        }
+        contents.add(element);
+    }
+
+    // stack: first element in list represents bottom element in stack
+    // queue: first element in list represents first element in the queue
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public E pop()
+        throws IllegalStateException
+    {
+        if (depth() == 0)
+        {
+            throw new IllegalStateException();
+        }
+        return contents.remove(contents.size() - 1);
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int depth()
+    {
+        return contents.size();
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Iterator<E> iterator()
+    {
+        return contents.iterator();
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void clear()
+    {
+        contents.clear();
+
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Stack<E> newInstance()
+    {
+        return new ListStack<>(capacity);
+    }
+
+// /**
+// * {@inheritDoc}
+// */
+// @Override
+// public String toString()
+// {
+// return contents + ":" + capacity;
+// }
+
+}
