@@ -1,0 +1,177 @@
+package boundedstack;
+
+/**
+ * <p>
+ * A bounded, last-in first-out data structure. Elements in this stack may not be null.
+ * </p>
+ * <p>
+ * A typical string representation of a bounded stack is <code>[e_1, e_2, ..., e_n-1, e_n]:c</code>
+ * where <code>e_1</code> is the bottom element of the stack and <code>e_n</code> is the top
+ * element, and <code>c</code> is the capacity.
+ * </p>
+ * <p>
+ * Implementations of this interface should have a one-argument constructor that takes the desired
+ * capacity and creates an empty stack. The capacity must be strictly greater than zero.
+ * </p>
+ * <p>
+ * <code>public Stack(int max)</code>
+ * </p>
+ * <p>
+ * A stack iterator iterates through the stack from bottom to top.
+ * </p>
+ * 
+ * @author sugie
+ * @version Feb 23, 2019
+ * @param <E>
+ *            the type of elements in this stack
+ */
+public interface Stack<E>
+    extends Iterable<E>
+{
+    /**
+     * <p>
+     * Adds the specified element onto to the top of this stack.
+     * </p>
+     * <p>
+     * Example:<br>
+     * { <code>s = [A, B, C]:6</code> <em>and</em> <code>x = X</code> }<br>
+     * <code>s.push(x)</code><br>
+     * { <code>s = [A, B, C, X]:6</code> <em>and<em> <code>x = X</code> }<br>
+     * </p>
+     * 
+     * @param element
+     *            the element to be pushed onto this stack
+     * @throws IllegalStateException
+     *             if this stack is full
+     * @throws IllegalArgumentException
+     *             if the specified element is null
+     */
+    public void push(E element)
+        throws IllegalStateException,
+        IllegalArgumentException;
+
+
+    /**
+     * <p>
+     * Removes and returns the top element from this stack.
+     * </p>
+     * <p>
+     * Example:<br>
+     * { <code>s = [A, B, C]:6</code> }<br>
+     * <code>x = s.pop()</code><br>
+     * { <code>s = [A, B]:6</code> <em>and</em> <code>x = C</code> }<br>
+     * </p>
+     * 
+     * @return the top element from this stack
+     * @throws IllegalStateException
+     *             if this stack is empty
+     */
+    public E pop();
+
+
+    /**
+     * <p>
+     * Returns the number of elements in this stack.
+     * </p>
+     * *
+     * <p>
+     * Example:<br>
+     * { <code>s = [A, B, C]:6</code> }<br>
+     * <code>n = s.depth()</code><br>
+     * { <code>s = [A, B]:6</code> <em>and</em> <code>n = 3</code> }<br>
+     * </p>
+     * 
+     * @return the number of elements in this stack
+     */
+    public int depth();
+
+
+    /**
+     * <p>
+     * Returns the number of elements that this stack can hold.
+     * </p>
+     * <p>
+     * Example:<br>
+     * { <code>s - [A, B, C]:6</code> }<br>
+     * <code>n = s.capacity()</code><br>
+     * { <code>s = [A, B, C]:6</code> <em>and</em> <code>n = 5</code> }<br>
+     * </p>
+     * 
+     * @return the number of elements that this stack can hold
+     */
+    public int capacity();
+
+
+    /**
+     * Returns the string representation of this stack. The string representation contains a list of
+     * this stack's elements from bottom to top and the stack's capacity. The list is enclosed in
+     * square brackets and adjacent elements are separated by a comma and a space. The list and
+     * capacity are separated by a colon. For example, the string <code>[A, B, C,]:6</code>
+     * represents a stack with 3 elements, where A is the bottom element, C is the top element, and
+     * the stack has a capacity of 6.
+     * 
+     * @return the string representation of this stack
+     */
+    @Override
+    public String toString();
+
+
+    /**
+     * Returns true if the specified object is equal to this stack. To be equal, the specified
+     * object must be a bounded stack with the same capacity, and it must contain the same number of
+     * elements with the same values in the same order.
+     * 
+     * @param obj
+     *            the object to be tested for equality to this stack
+     * @return true if the specified object is equal to this stack, false otherwise
+     */
+    @Override
+    public boolean equals(Object obj);
+
+
+    /**
+     * Returns the hash code of this stack.
+     * 
+     * @return the hash code of this stack
+     */
+    @Override
+    public int hashCode();
+
+
+    /**
+     * Clears this stack.
+     */
+    public void clear();
+
+
+    /**
+     * Returns a new empty stack with the same capacity as this stack.
+     * 
+     * @return a new empty stack with the same capacity as this stack
+     */
+    public Stack<E> newInstance();
+
+
+    /**
+     * Returns a copy of this stack. The elements in the copy are references to the elements in this
+     * stack.
+     * 
+     * @return a copy of this stack
+     */
+    public Stack<E> copy();
+
+
+    /**
+     * Reverses the elements in this stack.
+     */
+    public void reverse();
+
+
+    /**
+     * Pushes multiple elements at once.
+     * 
+     * @param elements
+     *            are the elements to be pushed
+     */
+    public void pushMultiple(E[] elements);
+}
