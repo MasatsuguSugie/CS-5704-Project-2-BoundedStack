@@ -1,0 +1,428 @@
+package boundedstack;
+
+import static org.junit.Assert.*;
+import java.util.Iterator;
+import org.junit.Before;
+import org.junit.Test;
+
+/**
+ * Write a one-sentence summary of your class here. Follow it with additional details about its
+ * purpose, what abstraction it represents, and how to use it.
+ * 
+ * @author sugie
+ * @version Mar 4, 2019
+ */
+public class ArrayStackTest
+{
+    private ArrayStack<String> stack_empty_3;
+    private ArrayStack<String> stack_ABC_6;
+
+
+    /**
+     * Place a description of your method here.
+     */
+    @Before
+    public void setUp()
+    {
+        stack_empty_3 = new ArrayStack<>(3);
+        stack_ABC_6 = new ArrayStack<>(6);
+        stack_ABC_6.push("A");
+        stack_ABC_6.push("B");
+        stack_ABC_6.push("C");
+    }
+
+
+    /**
+     * Place a description of your method here.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testPushNullOntoStack()
+    {
+        stack_ABC_6.push(null);
+        fail();
+    }
+
+
+    /**
+     * Place a description of your method here.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testPopFromEmptyStack()
+    {
+        String str = stack_empty_3.pop();
+        fail();
+    }
+
+
+    /**
+     * Place a description of your method here.
+     */
+    @Test
+    public void testABCIterator()
+    {
+        String result = "";
+        for (String s : stack_ABC_6)
+        {
+            result += s;
+        }
+        assertEquals("ABC", result);
+    }
+    
+    
+    /**
+     * Place a description of your method here.
+     */
+    @Test(expected = java.util.NoSuchElementException.class)
+    public void testIteratorNoSuchElement()
+    {
+        stack_ABC_6.push("D");
+        stack_ABC_6.push("E");
+        stack_ABC_6.push("F");
+        Iterator<String> iter = stack_ABC_6.iterator();
+        String str = "";
+        while (iter.hasNext())
+        {
+            String s = iter.next();
+            str += s;
+        }
+        String s2 = iter.next();
+        fail();
+    }
+
+
+    // ================================================
+    // Most of the tests below are of secondary methods
+    // and depend on iterators
+    // ================================================
+
+    /**
+     * Place a description of your method here.
+     */
+    @Test
+    public void testEmptyToString()
+    {
+        assertEquals("[]:3", stack_empty_3.toString());
+    }
+
+
+    /**
+     * Place a description of your method here.
+     */
+    @Test
+    public void testABCToString()
+    {
+        assertEquals("[A, B, C]:6", stack_ABC_6.toString());
+    }
+
+
+    /**
+     * Place a description of your method here.
+     */
+    @Test
+    public void testABCEqualsNull()
+    {
+        ArrayStack<String> s = null;
+        assertFalse(stack_ABC_6.equals(s));
+    }
+
+
+    /**
+     * Place a description of your method here.
+     */
+    @Test
+    public void testABCEqualsNonStack()
+    {
+        assertFalse(stack_ABC_6.equals("[A, B, C]:6"));
+    }
+
+
+    /**
+     * Place a description of your method here.
+     */
+    @Test
+    public void testABC6EqualsDifferentABC6()
+    {
+        ArrayStack<String> stack_ABC_6_dup = new ArrayStack<>(6);
+        stack_ABC_6_dup.push("A");
+        stack_ABC_6_dup.push("B");
+        stack_ABC_6_dup.push("C");
+
+        assertTrue(stack_ABC_6.equals(stack_ABC_6_dup));
+    }
+
+
+    /**
+     * Place a description of your method here.
+     */
+    @Test
+    public void testABC6EqualsABC10()
+    {
+        ArrayStack<String> stack_ABC_10 = new ArrayStack<>(10);
+        stack_ABC_10.push("A");
+        stack_ABC_10.push("B");
+        stack_ABC_10.push("C");
+
+        assertFalse(stack_ABC_6.equals(stack_ABC_10));
+    }
+
+
+    /**
+     * Place a description of your method here.
+     */
+    @Test
+    public void testABC6EqualsAB6()
+    {
+        ArrayStack<String> stack_AB_6 = new ArrayStack<>(6);
+        stack_AB_6.push("A");
+        stack_AB_6.push("B");
+
+        assertFalse(stack_ABC_6.equals(stack_AB_6));
+    }
+
+
+    /**
+     * Place a description of your method here.
+     */
+    @Test
+    public void testEmpty3EqualsDifferentEmpty3()
+    {
+        ArrayStack<String> stack_empty_3_dup = new ArrayStack<>(3);
+
+        assertTrue(stack_empty_3.equals(stack_empty_3_dup));
+    }
+
+
+    /**
+     * Place a description of your method here.
+     */
+    @Test
+    public void testABC6EqualsDEF6()
+    {
+        ArrayStack<String> stack_DEF_6 = new ArrayStack<>(6);
+        stack_DEF_6.push("D");
+        stack_DEF_6.push("E");
+        stack_DEF_6.push("F");
+
+        assertFalse(stack_ABC_6.equals(stack_DEF_6));
+    }
+
+
+    /**
+     * Place a description of your method here.
+     */
+    @Test
+    public void testABC6ListBasedEqualsABC6ArrayBased()
+    {
+        ArrayStack<String> stack_ABC_6_array = new ArrayStack<>(6);
+        stack_ABC_6_array.push("A");
+        stack_ABC_6_array.push("B");
+        stack_ABC_6_array.push("C");
+
+        assertTrue(stack_ABC_6.equals(stack_ABC_6_array));
+    }
+
+
+    /**
+     * Place a description of your method here.
+     */
+    @Test
+    public void testHashCodeABC6AndAB6()
+    {
+        ArrayStack<String> stack_AB_6 = new ArrayStack<>(10);
+        stack_AB_6.push("A");
+        stack_AB_6.push("B");
+
+        assertFalse(stack_ABC_6.hashCode() == stack_AB_6.hashCode());
+    }
+
+
+    /**
+     * Place a description of your method here.
+     */
+    @Test
+    public void testHashCodeABC6AndDifferentABC6()
+    {
+        ArrayStack<String> stack_ABC_6_dup = new ArrayStack<>(6);
+        stack_ABC_6_dup.push("A");
+        stack_ABC_6_dup.push("B");
+        stack_ABC_6_dup.push("C");
+
+        assertTrue(stack_ABC_6.hashCode() == stack_ABC_6.hashCode());
+    }
+
+
+    /**
+     * Place a description of your method here.
+     */
+    @Test
+    public void testHashCodeABC6AndDifferentABC10()
+    {
+        ArrayStack<String> stack_ABC_10 = new ArrayStack<>(10);
+        stack_ABC_10.push("A");
+        stack_ABC_10.push("B");
+        stack_ABC_10.push("C");
+
+        assertFalse(stack_ABC_6.hashCode() == stack_ABC_10.hashCode());
+    }
+
+
+    /**
+     * Place a description of your method here.
+     */
+    @Test
+    public void testHashCodeABC6ListBasedAndABC6ArrayBased()
+    {
+        ListStack<String> stack_ABC_6_list = new ListStack<>(6);
+        stack_ABC_6_list.push("A");
+        stack_ABC_6_list.push("B");
+        stack_ABC_6_list.push("C");
+
+        assertTrue(stack_ABC_6.hashCode() == stack_ABC_6_list.hashCode());
+    }
+
+
+    /**
+     * Place a description of your method here.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testMaxLessThanOne()
+    {
+        Stack<String> stack_0 = new ArrayStack<>(0);
+        fail();
+    }
+
+
+    /**
+     * Place a description of your method here.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testPushStackFull()
+    {
+        stack_empty_3.push("A");
+        stack_empty_3.push("B");
+        stack_empty_3.push("C");
+        assertEquals(3, stack_empty_3.depth());
+        assertEquals(3, stack_empty_3.capacity());
+        stack_empty_3.push("D");
+        fail();
+    }
+
+
+    /**
+     * Place a description of your method here.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testPopDepthAtZero()
+    {
+        stack_empty_3.pop();
+        fail();
+    }
+
+
+    /**
+     * Place a description of your method here.
+     */
+    @Test
+    public void testPop()
+    {
+        stack_ABC_6.pop();
+        assertEquals(2, stack_ABC_6.depth());
+    }
+
+
+    /**
+     * Place a description of your method here.
+     */
+    @Test
+    public void testClear()
+    {
+        stack_ABC_6.clear();
+        assertEquals(0, stack_ABC_6.depth());
+    }
+
+
+    /**
+     * Place a description of your method here.
+     */
+    @Test
+    public void testABCNewInstance()
+    {
+        Stack<String> newStack = stack_ABC_6.newInstance();
+        assertEquals(0, newStack.depth());
+        assertEquals(6, newStack.capacity());
+    }
+
+
+    /**
+     * Place a description of your method here.
+     */
+    @Test
+    public void testABC6EqualsSelf()
+    {
+        assertTrue(stack_ABC_6.equals(stack_ABC_6));
+    }
+
+
+    /**
+     * Place a description of your method here.
+     */
+    @Test
+    public void testABCCopy()
+    {
+        Stack<String> copy = stack_ABC_6.copy();
+        assertEquals(3, copy.depth());
+        assertEquals(6, copy.capacity());
+        assertEquals(stack_ABC_6, copy);
+        String s1 = stack_ABC_6.pop();
+        String s1_copy = copy.pop();
+        assertTrue(s1 == s1_copy);
+    }
+
+
+    /**
+     * Place a description of your method here.
+     */
+    @Test
+    public void testABCReverse()
+    {
+        stack_ABC_6.reverse();
+        assertEquals(3, stack_ABC_6.depth());
+        assertEquals(6, stack_ABC_6.capacity());
+        String str = stack_ABC_6.pop();
+        assertEquals("A", str);
+    }
+
+
+    /**
+     * Place a description of your method here.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testPushMultipleIsFull()
+    {
+        stack_empty_3.pushMultiple("A", "B", "C");
+        stack_empty_3.pushMultiple("D", "E");
+        fail();
+    }
+
+
+    /**
+     * Place a description of your method here.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testPushMultipleNull()
+    {
+        stack_empty_3.pushMultiple(null);
+        fail();
+    }
+
+
+    /**
+     * Place a description of your method here.
+     */
+    @Test
+    public void testPushMultiple()
+    {
+        stack_empty_3.pushMultiple("A", "B", "C");
+        assertEquals(3, stack_empty_3.depth());
+    }
+}
